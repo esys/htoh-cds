@@ -1,12 +1,61 @@
 import React, { Component, Dispatch } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { connect } from "react-redux";
-import { createAddHotelAction, HotelActions, createDeleteHotelAction } from "../state/hotel/actions";
-import { Hotel } from "../state/hotel/reducer";
-import { AppState } from "../state/store";
-import { getHotels } from "../state/hotel/selectors";
-import { HotelCard } from "../components/HotelCard";
+import { GlobalState } from "../state/store";
+import SearchForm from "../components/SearchForm";
+import { Place, Search } from "../state/search/reducer";
+import { getSearch } from "../state/search/selectors";
+import { createUpdateSearchAction, SearchActions } from "../state/search/actions";
 
+type Props = {
+  navigation: any; // do better
+  query: string;
+
+  // From Redux
+  search: Search;
+  dispatchUpdateSearch: (search: Search) => void;
+};
+
+class HomeScreen extends Component<Props, {}> {
+  onFormValidate(place: Place, start: string, end: string) {
+    this.props.dispatchUpdateSearch({ place, start, end });
+  }
+
+  render() {
+    const { navigation, search } = this.props;
+    return (
+      <View style={styles.container}>
+        <SearchForm navigation={navigation} onFormValidate={this.onFormValidate} />
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    margin: 15,
+  },
+  name: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  address: {
+    fontSize: 12,
+  },
+});
+
+const mapStateToProps = (state: GlobalState) => ({
+  search: getSearch(state),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<SearchActions>) => ({
+  dispatchUpdateSearch: (search: Search) => dispatch(createUpdateSearchAction(search)),
+});
+
+export default connect(mapStateToProps)(HomeScreen);
+
+/*
 type Props = {
   navigation: any; // do better
   hotels: Hotel[];
@@ -67,3 +116,4 @@ const mapDispatchToProps = (dispatch: Dispatch<HotelActions>) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+*/

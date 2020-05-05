@@ -28,7 +28,7 @@ export default class CdsApi {
   static Token: string | null;
   static AgentDutyCode: string | null;
 
-  private buildUrl(apiResource: CdsResources, params: { [key: string]: string } | null = null) {
+  private buildUrl(apiResource: CdsResources, params: QueryStringParameters | null = null) {
     let url = `${cdsToken.url}/${apiResource}`;
     if (params) {
       const queryString = Object.keys(params)
@@ -78,7 +78,7 @@ export default class CdsApi {
 
   private async callApi(
     apiResource: CdsResources,
-    params: { [key: string]: string } | null,
+    params: QueryStringParameters | null,
     method: CdsMethod = CdsMethod.GET
   ) {
     this.doAuthorizeIfRequired();

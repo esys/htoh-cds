@@ -13,7 +13,14 @@ export interface HotelMap {
   [id: string]: Hotel;
 }
 
+export interface Query {
+  place: string | null;
+  start: string | null;
+  end: string | null;
+}
+
 export interface HotelState {
+  query: Query;
   byId: HotelMap;
   allIds: string[];
 }
