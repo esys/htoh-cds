@@ -1,5 +1,4 @@
 import * as Location from "expo-location";
-import { getLogger } from "../../config/logging";
 
 export async function findCurrentLocation(): Promise<Location.LocationData> {
   const permission: Location.PermissionResponse = await Location.requestPermissionsAsync();

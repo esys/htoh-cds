@@ -7,7 +7,7 @@ import GooglePlacesApi, { Prediction, AutocompleteResponse, DetailsReponse } fro
 import GoogleGeocodingApi, { GeocodingResponse } from "../../api/google-geocoding/geocoding";
 import { FlatList } from "react-native-gesture-handler";
 import { PlaceCard } from "./PlaceCard";
-import { getPayload } from "../../api/common";
+import { getJSON } from "../../api/common";
 import { findCurrentLocation } from "../../util/location";
 import { Place, Search } from "../../state/search/reducer";
 import { connect } from "react-redux";
@@ -54,7 +54,7 @@ class PlaceForm extends React.Component<Props, State> {
     const { latitude, longitude } = (await findCurrentLocation()).coords;
     this.setState({ currentPosition: { latitude, longitude } });
 
-    const geocoding = await getPayload<GeocodingResponse>(this.geocoder.reverse(latitude, longitude));
+    const geocoding = await getJSON<GeocodingResponse>(this.geocoder.reverse(latitude, longitude));
     let city = this.geocoder.findCity(geocoding);
 
     if (!city) {
@@ -85,7 +85,7 @@ class PlaceForm extends React.Component<Props, State> {
     const { navigation, dispatchUpdateSearch } = this.props;
 
     // need to find its lat/lng to build a proper Place object
-    const detailsResp = await getPayload<DetailsReponse>(this.placesApi.detailPlaces(item.place_id));
+    const detailsResp = await getJSON<DetailsReponse>(this.placesApi.detailPlaces(item.place_id));
     const { lat, lng } = detailsResp.result.geometry.location;
     const place = { city: item.description, latitude: lat, longitude: lng };
 
@@ -116,7 +116,7 @@ class PlaceForm extends React.Component<Props, State> {
     if (currentPosition) {
       opt["location"] = `${currentPosition.latitude},${currentPosition.longitude}`;
     }
-    const autocompleteResp = await getPayload<AutocompleteResponse>(this.placesApi.autocompletePlaces(text, opt));
+    const autocompleteResp = await getJSON<AutocompleteResponse>(this.placesApi.autocompletePlaces(text, opt));
 
     const predictions = autocompleteResp.predictions.filter(
       (p: any) => p.types.includes("locality") || p.types.includes("sublocality")

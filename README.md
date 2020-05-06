@@ -9,6 +9,7 @@ Sample react native application written in TypeScript consuming CDSGroupe REST A
 - Redux
 - Saga
 - React Native Elements
+- Jest
 
 ## API used
 
@@ -31,4 +32,10 @@ Run the application
 
 ```
 ⇒  expo start
+```
+
+Run tests
+
+```
+⇒  npm test
 ```
