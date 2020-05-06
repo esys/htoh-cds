@@ -2,18 +2,18 @@ import React, { Dispatch } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { Input } from "react-native-elements";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
-import { getLogger } from "../../config/logging";
-import GooglePlacesApi, { Prediction, AutocompleteResponse, DetailsReponse } from "../api/google-places/places";
-import GoogleGeocodingApi, { GeocodingResponse } from "../api/google-geocoding/geocoding";
+import { getLogger } from "../../../config/logging";
+import GooglePlacesApi, { Prediction, AutocompleteResponse, DetailsReponse } from "../../api/google-places/places";
+import GoogleGeocodingApi, { GeocodingResponse } from "../../api/google-geocoding/geocoding";
 import { FlatList } from "react-native-gesture-handler";
 import { PlaceCard } from "./PlaceCard";
-import { getPayload } from "../api/common";
-import { findCurrentLocation } from "../util/location";
-import { Place, Search } from "../state/search/reducer";
+import { getPayload } from "../../api/common";
+import { findCurrentLocation } from "../../util/location";
+import { Place, Search } from "../../state/search/reducer";
 import { connect } from "react-redux";
-import { getSearch } from "../state/search/selectors";
-import { GlobalState } from "../state/store";
-import { SearchActions, createUpdateSearchAction } from "../state/search/actions";
+import { getSearch } from "../../state/search/selectors";
+import { GlobalState } from "../../state/store";
+import { SearchActions, createUpdateSearchAction } from "../../state/search/actions";
 
 const logger = getLogger("PlaceForm");
 
@@ -32,9 +32,14 @@ type State = {
 };
 
 class PlaceForm extends React.Component<Props, State> {
+  static AUTOCOMPLETE_DELAY = 500;
+  static AUTOCOMPLETE_MINCHAR = 2;
+
   state: State = {};
   geocoder = new GoogleGeocodingApi();
   placesApi = new GooglePlacesApi();
+
+  autocompleteTimer?: ReturnType<typeof setTimeout>;
 
   componentDidMount() {
     this.findCurrentLocation();
@@ -105,10 +110,7 @@ class PlaceForm extends React.Component<Props, State> {
     return <View style={styles.separator} />;
   }
 
-  async onTextChange(text: string) {
-    this.setState({ text });
-
-    // update predictions
+  async refreshAutocompletePredictions(text: string) {
     const { currentPosition } = this.state;
     let opt: { [key: string]: string } = { types: "(regions)" };
     if (currentPosition) {
@@ -121,6 +123,22 @@ class PlaceForm extends React.Component<Props, State> {
     );
 
     this.setState({ predictions });
+  }
+
+  onTextChange(text: string) {
+    this.setState({ text });
+
+    // trigger autocompletion after X ms and min N chars
+    if (!text || text.length < PlaceForm.AUTOCOMPLETE_MINCHAR) {
+      this.setState({ predictions: [] });
+      return;
+    }
+    if (this.autocompleteTimer) {
+      clearTimeout(this.autocompleteTimer);
+    }
+    this.autocompleteTimer = setTimeout(() => {
+      this.refreshAutocompletePredictions(text);
+    }, PlaceForm.AUTOCOMPLETE_DELAY);
   }
 
   render() {

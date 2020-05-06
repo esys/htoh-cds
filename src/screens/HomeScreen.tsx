@@ -2,7 +2,7 @@ import React, { Component, Dispatch } from "react";
 import { View, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import { GlobalState } from "../state/store";
-import SearchForm from "../components/SearchForm";
+import SearchForm from "../components/search/SearchForm";
 import { Place, Search } from "../state/search/reducer";
 import { getSearch } from "../state/search/selectors";
 import { createUpdateSearchAction, SearchActions } from "../state/search/actions";

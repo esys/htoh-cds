@@ -1,6 +1,6 @@
 import React, { Component, Dispatch } from "react";
 import { View, StyleSheet } from "react-native";
-import PlaceForm from "../components/PlaceForm";
+import PlaceForm from "../components/search/PlaceForm";
 import { Place, Search } from "../state/search/reducer";
 import { getSearch } from "../state/search/selectors";
 import { connect } from "react-redux";

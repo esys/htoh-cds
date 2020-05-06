@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet, Text } from "react-native";
-import { Prediction } from "../api/google-places/places";
+import { Prediction } from "../../api/google-places/places";
 
 type Props = {
   item: Prediction;

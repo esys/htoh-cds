@@ -1,7 +1,7 @@
 import React from "react";
 import { Calendar } from "react-native-calendars";
 import moment from "moment";
-import { getLogger } from "../../config/logging";
+import { getLogger } from "../../../config/logging";
 
 const logger = getLogger("RangeCalendar");
 
