@@ -7,7 +7,7 @@ import TransparentModal from "../common/TransparentModal";
 import moment from "moment";
 import RangeCalendar from "../common/RangeCalendar";
 import { getLogger } from "../../../config/logging";
-import { Place, Search } from "../../state/search/reducer";
+import { Search } from "../../state/search/reducer";
 import { getSearch } from "../../state/search/selectors";
 import { SearchActions, createUpdateSearchAction } from "../../state/search/actions";
 import { GlobalState } from "../../state/store";

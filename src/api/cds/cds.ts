@@ -61,8 +61,9 @@ export type Hotel = {
   HotelInfoList: HotelInfo[];
   RoomAmenityList: RoomAmenity[];
   ImageInfoList: ImageInfo[];
-  ScoreBookingCom: string;
-  NbrReviewBookingCom: number;
+  ScoreBookingCom?: string;
+  NbrReviewBookingCom?: number;
+  HealthyAndSafetyRating?: string;
 };
 
 export type RoomRate = {

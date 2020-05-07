@@ -38,7 +38,9 @@ const SearchResultScreen: FunctionComponent<Props> = ({ search }: Props) => {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator animating={!results} size="large" color="rgb(82,136,216)" />
+      {!results && (
+        <ActivityIndicator style={styles.loader} animating={!results} size="large" color="rgb(82,136,216)" />
+      )}
       <FlatList
         style={styles.list}
         data={results?.Hotels}
@@ -54,9 +56,14 @@ const SearchResultScreen: FunctionComponent<Props> = ({ search }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 15,
+    margin: 0,
   },
-  list: {},
+  loader: {
+    marginTop: "30%",
+  },
+  list: {
+    padding: 0,
+  },
 });
 
 const mapStateToProps = (state: GlobalState) => ({
