@@ -19,7 +19,6 @@ const defaultPlaceText = "Please select your place of stay";
 
 type Props = {
   navigation: any;
-  onFormValidate: (place: Place, start: string, end: string) => void;
 
   // From Redux
   dispatchUpdateSearch: (search: Search) => void;
@@ -53,6 +52,10 @@ class SearchForm extends React.Component<Props, State> {
     this.props.dispatchUpdateSearch({ start, end });
   }
 
+  onSearch(): void {
+    this.props.navigation.navigate("SearchResults");
+  }
+
   renderModal() {
     const { calendarVisible, start, end } = this.state;
     return (
@@ -70,6 +73,8 @@ class SearchForm extends React.Component<Props, State> {
   }
 
   render() {
+    const { start, end } = this.state;
+    const { place } = this.props.search;
     return (
       <View style={styles.container}>
         <Input
@@ -85,7 +90,7 @@ class SearchForm extends React.Component<Props, State> {
           }}
         />
         <View style={styles.buttonContainer}>
-          <Button title="Search" onPress={() => console.log("run search")} />
+          <Button disabled={!(place && start && end)} title="Search" onPress={() => this.onSearch()} />
         </View>
 
         {this.renderModal()}

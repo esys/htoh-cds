@@ -17,15 +17,11 @@ type Props = {
 };
 
 class HomeScreen extends Component<Props, {}> {
-  onFormValidate(place: Place, start: string, end: string) {
-    this.props.dispatchUpdateSearch({ place, start, end });
-  }
-
   render() {
     const { navigation, search } = this.props;
     return (
       <View style={styles.container}>
-        <SearchForm navigation={navigation} onFormValidate={this.onFormValidate} />
+        <SearchForm navigation={navigation} />
       </View>
     );
   }

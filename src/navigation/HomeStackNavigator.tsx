@@ -2,8 +2,8 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../screens/HomeScreen";
 import { defaultOptions } from "./common";
-import HotelListScreen from "../screens/HotelListScreen";
 import PlaceSelectionScreen from "../screens/PlaceSelectionScreen";
+import SearchResultScreen from "../screens/SearchResultScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,7 +16,11 @@ const HomeStackNavigator = () => {
         component={PlaceSelectionScreen}
         options={{ ...defaultOptions, title: "Place" }}
       />
-      <Stack.Screen name="HotelList" component={HotelListScreen} options={{ ...defaultOptions, title: "Results" }} />
+      <Stack.Screen
+        name="SearchResults"
+        component={SearchResultScreen}
+        options={{ ...defaultOptions, title: "Your hotels" }}
+      />
     </Stack.Navigator>
   );
 };
