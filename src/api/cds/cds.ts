@@ -1,5 +1,6 @@
 import cdsToken from "../../../config/cds.token.local.json";
 import { getLogger } from "../../../config/logging";
+import { QueryStringParameters } from "../common";
 
 const logger = getLogger("CdsApi");
 
@@ -10,6 +11,11 @@ enum CdsResources {
 
 enum CdsMethod {
   GET = "GET",
+}
+
+enum YesNo {
+  YES = "Yes",
+  NO = "No",
 }
 
 export enum CdsCurrency {
@@ -23,6 +29,90 @@ export enum CdsLanguage {
 export enum CdsRadiusMeasure {
   K = "K",
 }
+
+export interface PagedResponse {
+  NumberOfResult: number;
+  CurrentPage: number;
+  PageSize: number;
+  TotalCount: number;
+  TotalPages: number;
+  PreviousPage: YesNo;
+  NextPage: YesNo;
+}
+
+export interface SearchResponse extends PagedResponse {
+  Hotels: Hotel[];
+  MaxPrice: number;
+  MinPrice: number;
+}
+
+export type Hotel = {
+  HtlId: number;
+  HtlCd: string;
+  HtlName: string;
+  HtlAddress1: string;
+  HtlCity: string;
+  HtlStars: number;
+  Distance: number;
+  HtlLongitude: number;
+  HtlLatitude: number;
+  ImageUrl: string;
+  RoomRateList: RoomRate[];
+  HotelInfoList: HotelInfo[];
+  RoomAmenityList: RoomAmenity[];
+  ImageInfoList: ImageInfo[];
+  ScoreBookingCom: string;
+  NbrReviewBookingCom: number;
+};
+
+export type RoomRate = {
+  CurCd: string; // country local currency, e.g. JPY
+  RatPrice: number;
+  OtherCurrency: OtherCurrency;
+  TotalPricePerRoom: number;
+  TotalPricePerStay: number;
+  RatName: string;
+  RatDesc: string;
+  RoomImagesList: string[];
+  IncludedFeatures: string[];
+  CancellationPolicyDate: string;
+  CancelPenaltyList: string[];
+  RatBreakfast: boolean;
+  RatLunch: boolean;
+  RatDiner: boolean;
+  IsCancellable: boolean;
+};
+
+export type OtherCurrency = {
+  CurCd: string;
+  RatPrice: number;
+  TaxPrice: number;
+  RatMealPrice: number;
+  RoomPrice: number;
+  TotalPricePerRoom: number;
+  TotalPricePerStay: number;
+};
+
+export type HotelInfo = {
+  OtaType: string;
+  OtaCd: number;
+  OtaCode: OtaCode;
+};
+
+export type OtaCode = {
+  OtaName: string;
+  OtaName2: string;
+};
+
+export type RoomAmenity = {
+  OtaType: string;
+  OtaCd: number;
+  OtaCode: OtaCode;
+};
+
+export type ImageInfo = {
+  ImgFile: string;
+};
 
 export default class CdsApi {
   static Token: string | null;
@@ -95,8 +185,8 @@ export default class CdsApi {
   }
 
   async search(
-    latitude: string,
-    longitude: string,
+    latitude: number,
+    longitude: number,
     radius: number,
     checkin: string,
     checkout: string,
@@ -113,8 +203,8 @@ export default class CdsApi {
       agentDutyCode: CdsApi.AgentDutyCode as string,
       currency: currency.toString(),
       language: language.toString(),
-      latitude,
-      longitude,
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
       radius: radius.toString(),
       radiusMeasure: radiusMeasure.toString(),
       checkin,
