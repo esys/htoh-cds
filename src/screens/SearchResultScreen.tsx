@@ -28,7 +28,7 @@ const SearchResultScreen: FunctionComponent<Props> = ({ navigation, search, disp
 
   const onHotelSelect = useCallback((hotel: Hotel) => {
     dispatchUpdateHotel(hotel);
-    navigation.navigate("RoomResults");
+    navigation.navigate("HotelDetails");
   }, []);
 
   useEffect(() => {

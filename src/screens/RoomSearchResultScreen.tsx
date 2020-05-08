@@ -1,10 +1,12 @@
 import React, { FunctionComponent } from "react";
-import { View, StyleSheet, ActivityIndicator, Text } from "react-native";
+import { View, StyleSheet, FlatList, Text } from "react-native";
 import { GlobalState } from "../state/store";
 import { connect } from "react-redux";
 import { getLogger } from "../../config/logging";
-import { Hotel } from "../api/cds/cds";
+import { Hotel, RoomRate } from "../api/cds/cds";
 import { getHotel } from "../state/hotel/selectors";
+import { RoomCard } from "../components/search/RoomCard";
+import uuidv1 from "uuid/v1";
 
 const logger = getLogger("RoomSearchResultScreen");
 
@@ -16,8 +18,22 @@ type Props = {
 const RoomSearchResultScreen: FunctionComponent<Props> = ({ hotel }: Props) => {
   return (
     <View style={styles.container}>
-      <ActivityIndicator style={styles.loader} size="large" color="rgb(82,136,216)" />
       <Text>{hotel.HtlName}</Text>
+      <FlatList
+        style={styles.list}
+        data={hotel.RoomRateList}
+        renderItem={({ item }) => {
+          return (
+            <RoomCard
+              item={item}
+              onRoomSelect={() => {
+                console.log("room select");
+              }}
+            />
+          );
+        }}
+        keyExtractor={(item: RoomRate) => uuidv1()} // item.RatCd is not unique enough
+      />
     </View>
   );
 };

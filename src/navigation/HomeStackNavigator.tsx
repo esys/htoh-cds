@@ -5,6 +5,7 @@ import { defaultOptions } from "./common";
 import PlaceSelectionScreen from "../screens/PlaceSelectionScreen";
 import SearchResultScreen from "../screens/SearchResultScreen";
 import RoomSearchResultScreen from "../screens/RoomSearchResultScreen";
+import HotelDetailsScreen from "../screens/HotelDetailsScreen";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,11 @@ const HomeStackNavigator = () => {
         name="SearchResults"
         component={SearchResultScreen}
         options={{ ...defaultOptions, title: "Hotels" }}
+      />
+      <Stack.Screen
+        name="HotelDetails"
+        component={HotelDetailsScreen}
+        options={{ ...defaultOptions, title: "Hotel" }}
       />
       <Stack.Screen
         name="RoomResults"
