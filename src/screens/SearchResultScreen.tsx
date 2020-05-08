@@ -1,8 +1,7 @@
-import React, { Dispatch, FunctionComponent, useState, useEffect } from "react";
+import React, { Dispatch, FunctionComponent, useState, useEffect, useCallback } from "react";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { GlobalState } from "../state/store";
 import { getSearch } from "../state/search/selectors";
-import { SearchActions, createUpdateSearchAction } from "../state/search/actions";
 import { Search } from "../state/search/reducer";
 import { connect } from "react-redux";
 import CdsApi, { SearchResponse, Hotel } from "../api/cds/cds";
@@ -10,17 +9,27 @@ import { getLogger } from "../../config/logging";
 import { getJSON } from "../api/common";
 import { FlatList } from "react-native-gesture-handler";
 import { HotelCard } from "../components/search/HotelCard";
+import { createUpdateHotelAction, HotelActions } from "../state/hotel/actions";
 
 const defaultRadius = 30;
-const logger = getLogger("SearchResultsScreen");
+const logger = getLogger("SearchResultScreen");
 
 type Props = {
+  navigation: any;
+
+  // From Redux
   search: Search;
+  dispatchUpdateHotel: (hotel: Hotel) => void;
 };
 
-const SearchResultScreen: FunctionComponent<Props> = ({ search }: Props) => {
+const SearchResultScreen: FunctionComponent<Props> = ({ navigation, search, dispatchUpdateHotel }: Props) => {
   const cds = new CdsApi();
   const [results, setResults] = useState<SearchResponse>();
+
+  const onHotelSelect = useCallback((hotel: Hotel) => {
+    dispatchUpdateHotel(hotel);
+    navigation.navigate("HotelDetails");
+  }, []);
 
   useEffect(() => {
     async function fetchHotels() {
@@ -45,7 +54,7 @@ const SearchResultScreen: FunctionComponent<Props> = ({ search }: Props) => {
         style={styles.list}
         data={results?.Hotels}
         renderItem={({ item }) => {
-          return <HotelCard item={item} onPress={(item) => console.log("clicked")} />;
+          return <HotelCard item={item} onHotelSelect={onHotelSelect} />;
         }}
         keyExtractor={(item: Hotel) => "" + item.HtlId}
       />
@@ -70,8 +79,8 @@ const mapStateToProps = (state: GlobalState) => ({
   search: getSearch(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<SearchActions>) => ({
-  dispatchUpdateSearch: (search: Search) => dispatch(createUpdateSearchAction(search)),
+const mapDispatchToProps = (dispatch: Dispatch<HotelActions>) => ({
+  dispatchUpdateHotel: (hotel: Hotel) => dispatch(createUpdateHotelAction(hotel)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchResultScreen);

@@ -1,5 +1,5 @@
 import React, { Dispatch } from "react";
-import { View, StyleSheet, Modal, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { Input, Button } from "react-native-elements";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
 import { MaterialCommunityIcons as IconMC } from "@expo/vector-icons";

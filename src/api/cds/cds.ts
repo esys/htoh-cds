@@ -67,6 +67,7 @@ export type Hotel = {
 };
 
 export type RoomRate = {
+  RatCd: string;
   CurCd: string; // country local currency, e.g. JPY
   RatPrice: number;
   OtherCurrency: OtherCurrency;
