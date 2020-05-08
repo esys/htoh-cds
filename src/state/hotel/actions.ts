@@ -1,14 +1,11 @@
 import { ActionType, BaseAction } from "../types";
-import { Hotel } from "./reducer";
+import { Hotel } from "../../api/cds/cds";
 
-export type AddHotelAction = BaseAction<Hotel>;
+export type UpdateHotelAction = BaseAction<Hotel>;
 
-export type DeleteHotelAction = BaseAction<string>;
-
-export const createAddHotelAction = (hotel: Hotel): AddHotelAction => ({ type: ActionType.ADD_HOTEL, payload: hotel });
-export const createDeleteHotelAction = (id: string): DeleteHotelAction => ({
-  type: ActionType.DELETE_HOTEL,
-  payload: id,
+export const createUpdateHotelAction = (hotel: Hotel): UpdateHotelAction => ({
+  type: ActionType.UPDATE_HOTEL,
+  payload: hotel,
 });
 
-export type HotelActions = AddHotelAction | DeleteHotelAction;
+export type HotelActions = UpdateHotelAction; // | OtherHotelAction;

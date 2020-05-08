@@ -1,8 +1,6 @@
 import { GlobalState } from "../store";
-import { Hotel } from "./reducer";
+import { Hotel } from "../../api/cds/cds";
 
-export const getHotels = (state: GlobalState): Hotel[] => {
-  return state.hotel.allIds.map((id) => {
-    return state.hotel.byId[id];
-  });
+export const getHotel = (state: GlobalState): Hotel | undefined => {
+  return state.hotel.hotel;
 };

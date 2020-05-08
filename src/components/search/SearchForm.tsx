@@ -1,5 +1,5 @@
 import React, { Dispatch } from "react";
-import { View, StyleSheet, Modal, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { Input, Button } from "react-native-elements";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
 import { MaterialCommunityIcons as IconMC } from "@expo/vector-icons";
@@ -7,7 +7,7 @@ import TransparentModal from "../common/TransparentModal";
 import moment from "moment";
 import RangeCalendar from "../common/RangeCalendar";
 import { getLogger } from "../../../config/logging";
-import { Place, Search } from "../../state/search/reducer";
+import { Search } from "../../state/search/reducer";
 import { getSearch } from "../../state/search/selectors";
 import { SearchActions, createUpdateSearchAction } from "../../state/search/actions";
 import { GlobalState } from "../../state/store";
@@ -19,7 +19,6 @@ const defaultPlaceText = "Please select your place of stay";
 
 type Props = {
   navigation: any;
-  onFormValidate: (place: Place, start: string, end: string) => void;
 
   // From Redux
   dispatchUpdateSearch: (search: Search) => void;
@@ -53,6 +52,10 @@ class SearchForm extends React.Component<Props, State> {
     this.props.dispatchUpdateSearch({ start, end });
   }
 
+  onSearch(): void {
+    this.props.navigation.navigate("SearchResults");
+  }
+
   renderModal() {
     const { calendarVisible, start, end } = this.state;
     return (
@@ -70,6 +73,8 @@ class SearchForm extends React.Component<Props, State> {
   }
 
   render() {
+    const { start, end } = this.state;
+    const { place } = this.props.search;
     return (
       <View style={styles.container}>
         <Input
@@ -85,7 +90,7 @@ class SearchForm extends React.Component<Props, State> {
           }}
         />
         <View style={styles.buttonContainer}>
-          <Button title="Search" onPress={() => console.log("run search")} />
+          <Button disabled={!(place && start && end)} title="Search" onPress={() => this.onSearch()} />
         </View>
 
         {this.renderModal()}
