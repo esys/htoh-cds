@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useCallback } from "react";
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { Hotel } from "../../api/cds/cds";
 import { Card, Image, Rating } from "react-native-elements";
@@ -10,7 +10,7 @@ const bookingGreen = "rgb(71,126,33)";
 
 type Props = {
   item: Hotel;
-  onPress: (hotel: Hotel) => void;
+  onHotelSelect: (hotel: Hotel) => void;
 };
 
 const formatHealthScore = (score: string): string => {
@@ -18,9 +18,9 @@ const formatHealthScore = (score: string): string => {
   return score.slice(0, score.length - 1).concat("/5");
 };
 
-export const HotelCard: FunctionComponent<Props> = ({ item, onPress }) => {
+export const HotelCard: FunctionComponent<Props> = ({ item, onHotelSelect }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onPress(item)}>
+    <TouchableOpacity style={styles.container} onPress={() => onHotelSelect(item)}>
       <Card containerStyle={styles.card} wrapperStyle={styles.cardInnerWrapper}>
         <View style={styles.photoContainer}>
           <Image style={styles.photo} source={{ uri: item.ImageUrl }} />
